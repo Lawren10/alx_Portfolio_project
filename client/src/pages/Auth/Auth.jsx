@@ -37,15 +37,18 @@ const Auth = () => {
 
   // Form Submission
   const handleSubmit = (e) => {
-    setConfirmPass(true);
     e.preventDefault();
-    if (isSignUp) {
-      data.password === data.confirmpass
-        ? dispatch(signUp(data, navigate))
-        : setConfirmPass(false);
-    } else {
-      dispatch(logIn(data, navigate));
-    }
+    dispatch(logIn(data, navigate));
+
+    // setConfirmPass(true);
+    // e.preventDefault();
+    // if (isSignUp) {
+    //   data.password === data.confirmpass
+    //     ? dispatch(signUp(data, navigate))
+    //     : setConfirmPass(false);
+    // } else {
+    //   dispatch(logIn(data, navigate));
+    // }
   };
 
   return (
