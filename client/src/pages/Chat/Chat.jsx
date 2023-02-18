@@ -7,13 +7,14 @@ import "./Chat.css";
 import { useEffect } from "react";
 import { userChats } from "../../api/ChatRequests";
 import { useDispatch, useSelector } from "react-redux";
+import { getAllUser } from "../../api/UserRequests";
 import { io } from "socket.io-client";
 
 const Chat = () => {
   const dispatch = useDispatch();
   const socket = useRef();
-  const { user } = useSelector((state) => state.authReducer.authData);
-
+  const { user } = useSelector((state) => state.authReducer.authData.data);
+  // state.authReducer.authData
   const [chats, setChats] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
@@ -23,20 +24,21 @@ const Chat = () => {
   useEffect(() => {
     const getChats = async () => {
       try {
-        // const { data } = await userChats(user._id);
-        // setChats(data);
-        setChats([]);
+        const { data } = await userChats(user._id);
+        const { allData } = await getAllUser();
+        setChats(data);
+        // setChats([]);
       } catch (error) {
         console.log(error);
       }
     };
     getChats();
-  }, []);
+  }, [user]);
 
   // Connect to Socket.io
   useEffect(() => {
-    socket.current = io("ws://localhost:8800");
-    socket.current.emit("new-user-add", "user");
+    socket.current = io("ws://localhost:8000");
+    socket.current.emit("new-user-add", user);
     socket.current.on("get-users", (users) => {
       setOnlineUsers(users);
     });
@@ -62,6 +64,10 @@ const Chat = () => {
     const online = onlineUsers.find((user) => user.userId === chatMember);
     return online ? true : false;
   };
+
+  console.log("from chat for user", user);
+
+  console.log("from chat online users", onlineUsers);
 
   return (
     <div className="Chat">
@@ -97,8 +103,8 @@ const Chat = () => {
         </div>
         <ChatBox
           chat={currentChat}
-          // currentUser={user._id}
-          currentUser={"user"}
+          currentUser={user._id}
+          // currentUser={"user"}
           setSendMessage={setSendMessage}
           receivedMessage={receivedMessage}
         />

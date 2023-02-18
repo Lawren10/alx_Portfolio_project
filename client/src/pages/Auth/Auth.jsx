@@ -37,19 +37,21 @@ const Auth = () => {
 
   // Form Submission
   const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(logIn(data, navigate));
-
-    // setConfirmPass(true);
     // e.preventDefault();
-    // if (isSignUp) {
-    //   data.password === data.confirmpass
-    //     ? dispatch(signUp(data, navigate))
-    //     : setConfirmPass(false);
-    // } else {
-    //   dispatch(logIn(data, navigate));
-    // }
+    // dispatch(logIn(data, navigate));
+
+    setConfirmPass(true);
+    e.preventDefault();
+    if (isSignUp) {
+      data.password === data.confirmpass
+        ? dispatch(signUp(data, navigate))
+        : setConfirmPass(false);
+    } else {
+      dispatch(logIn(data, navigate));
+    }
   };
+
+  // console.log(isSignUp);
 
   return (
     <div className="Auth">
