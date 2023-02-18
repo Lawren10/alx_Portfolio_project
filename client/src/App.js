@@ -8,12 +8,13 @@ import Chat from "./pages/Chat/Chat";
 
 function App() {
   const user = useSelector((state) => state.authReducer.authData);
+  console.log(user);
   return (
     <div
       className="App"
       style={{
         height:
-          window.location.href === "http://localhost:3000/chat"
+          window.location.href === "http://localhost:3000/"
             ? "calc(100vh - 2rem)"
             : "auto",
       }}
