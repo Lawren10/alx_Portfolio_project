@@ -11,12 +11,12 @@ import { getAllUser } from "../../api/UserRequests";
 import { io } from "socket.io-client";
 
 const Chat = () => {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const socket = useRef();
   const { user } = useSelector((state) => state.authReducer.authData.data);
   // state.authReducer.authData
   const [chats, setChats] = useState([]);
-  const [onlineUsers, setOnlineUsers] = useState([]);
+  // const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
@@ -27,12 +27,13 @@ const Chat = () => {
         const { data } = await userChats(user._id);
         const { allData } = await getAllUser();
         setChats(data);
+        console.log("all data", allData);
         // setChats([]);
       } catch (error) {
         console.log(error);
       }
     };
-    getChats();
+    // getChats();
   }, [user]);
 
   // Connect to Socket.io
@@ -40,7 +41,15 @@ const Chat = () => {
     socket.current = io("ws://localhost:8000");
     socket.current.emit("new-user-add", user);
     socket.current.on("get-users", (users) => {
-      setOnlineUsers(users);
+      // setOnlineUsers(users);
+      let availableChat = users.filter((user1) => {
+        return user1.userId._id !== user._id;
+      });
+      availableChat = availableChat.map((user) => {
+        return user.userId;
+      });
+      setChats(availableChat);
+      console.log("availableChat", availableChat);
     });
   }, [user]);
 
@@ -49,25 +58,26 @@ const Chat = () => {
     if (sendMessage !== null) {
       socket.current.emit("send-message", sendMessage);
     }
+    console.log("setmessage use effect", sendMessage);
   }, [sendMessage]);
 
   // Get the message from socket server
   useEffect(() => {
     socket.current.on("recieve-message", (data) => {
-      console.log(data);
+      console.log("received data", data);
       setReceivedMessage(data);
     });
   }, []);
 
   const checkOnlineStatus = (chat) => {
-    const chatMember = chat.members.find((member) => member !== user._id);
-    const online = onlineUsers.find((user) => user.userId === chatMember);
-    return online ? true : false;
+    // const chatMember = chat.members.find((member) => member !== user._id);
+    // const chatMember = chat.find((member) => member !== user._id);
+    // const online = onlineUsers.find((user) => user.userId === chatMember);
+    // return online ? true : false;
+    return true;
   };
 
   console.log("from chat for user", user);
-
-  console.log("from chat online users", onlineUsers);
 
   return (
     <div className="Chat">
@@ -83,6 +93,7 @@ const Chat = () => {
                   onClick={() => {
                     setCurrentChat(chat);
                   }}
+                  key={chat._id}
                 >
                   <Conversation
                     data={chat}
