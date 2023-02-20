@@ -2,14 +2,16 @@ import UserModel from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+let JWTKEY = "myjwttokenkey";
+
 // Register new user
 export const registerUser = async (req, res) => {
-
   const salt = await bcrypt.genSalt(10);
   const hashedPass = await bcrypt.hash(req.body.password, salt);
-  req.body.password = hashedPass
+  req.body.password = hashedPass;
   const newUser = new UserModel(req.body);
-  const {username} = req.body
+  const { username } = req.body;
+
   try {
     // addition new
     const oldUser = await UserModel.findOne({ username });
@@ -19,11 +21,9 @@ export const registerUser = async (req, res) => {
 
     // changed
     const user = await newUser.save();
-    const token = jwt.sign(
-      { username: user.username, id: user._id },
-      process.env.JWTKEY,
-      { expiresIn: "1h" }
-    );
+    const token = jwt.sign({ username: user.username, id: user._id }, JWTKEY, {
+      expiresIn: "1h",
+    });
     res.status(200).json({ user, token });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -47,7 +47,7 @@ export const loginUser = async (req, res) => {
       } else {
         const token = jwt.sign(
           { username: user.username, id: user._id },
-          process.env.JWTKEY,
+          JWTKEY,
           { expiresIn: "1h" }
         );
         res.status(200).json({ user, token });
