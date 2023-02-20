@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRef } from "react";
-import { addMessage, getMessages } from "../../api/MessageRequests";
+import {
+  addMessage,
+  // getMessages,
+  getAllMessages,
+} from "../../api/MessageRequests";
 import { getUser } from "../../api/UserRequests";
 import "./ChatBox.css";
 import { format } from "timeago.js";
@@ -24,6 +28,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
     const getUserData = async () => {
       try {
         const { data } = await getUser(userId);
+
         setUserData(data);
       } catch (error) {
         console.log(error);
@@ -37,7 +42,8 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const { data } = await getMessages(chat._id);
+        // const { data } = await getMessages(chat._id);
+        const { data } = await getAllMessages(chat._id, currentUser);
         setMessages(data);
       } catch (error) {
         console.log(error);
@@ -45,7 +51,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
     };
 
     if (chat !== null) fetchMessages();
-  }, [chat]);
+  }, [chat, currentUser]);
 
   // Always scroll to last Message
   useEffect(() => {
@@ -55,6 +61,7 @@ const ChatBox = ({ chat, currentUser, setSendMessage, receivedMessage }) => {
   // Send Message
   const handleSend = async (e) => {
     e.preventDefault();
+    if (newMessage === "") return;
     const message = {
       senderId: currentUser,
       text: newMessage,

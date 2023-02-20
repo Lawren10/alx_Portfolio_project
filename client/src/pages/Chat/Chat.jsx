@@ -5,9 +5,9 @@ import LogoSearch from "../../components/LogoSearch/LogoSearch";
 import NavIcons from "../../components/NavIcons/NavIcons";
 import "./Chat.css";
 import { useEffect } from "react";
-import { userChats } from "../../api/ChatRequests";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllUser } from "../../api/UserRequests";
+// import { userChats } from "../../api/ChatRequests";
+import { useSelector } from "react-redux";
+// import { getAllUser } from "../../api/UserRequests";
 import { io } from "socket.io-client";
 
 const Chat = () => {
@@ -21,20 +21,20 @@ const Chat = () => {
   const [sendMessage, setSendMessage] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
   // Get the chat in chat section
-  useEffect(() => {
-    const getChats = async () => {
-      try {
-        const { data } = await userChats(user._id);
-        const { allData } = await getAllUser();
-        setChats(data);
-        console.log("all data", allData);
-        // setChats([]);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    // getChats();
-  }, [user]);
+  // useEffect(() => {
+  //   const getChats = async () => {
+  //     try {
+  //       const { data } = await userChats(user._id);
+  //       const { allData } = await getAllUser();
+  //       setChats(data);
+  //       console.log("all data", allData);
+  //       // setChats([]);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   // getChats();
+  // }, [user]);
 
   // Connect to Socket.io
   useEffect(() => {
