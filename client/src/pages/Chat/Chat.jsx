@@ -11,37 +11,19 @@ import { useSelector } from "react-redux";
 import { io } from "socket.io-client";
 
 const Chat = () => {
-  // const dispatch = useDispatch();
   const socket = useRef();
   const { user } = useSelector((state) => state.authReducer.authData.data);
-  // state.authReducer.authData
+
   const [chats, setChats] = useState([]);
-  // const [onlineUsers, setOnlineUsers] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
   const [sendMessage, setSendMessage] = useState(null);
   const [receivedMessage, setReceivedMessage] = useState(null);
-  // Get the chat in chat section
-  // useEffect(() => {
-  //   const getChats = async () => {
-  //     try {
-  //       const { data } = await userChats(user._id);
-  //       const { allData } = await getAllUser();
-  //       setChats(data);
-  //       console.log("all data", allData);
-  //       // setChats([]);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   // getChats();
-  // }, [user]);
 
   // Connect to Socket.io
   useEffect(() => {
     socket.current = io("ws://localhost:8000");
     socket.current.emit("new-user-add", user);
     socket.current.on("get-users", (users) => {
-      // setOnlineUsers(users);
       let availableChat = users.filter((user1) => {
         return user1.userId._id !== user._id;
       });
@@ -70,10 +52,6 @@ const Chat = () => {
   }, []);
 
   const checkOnlineStatus = (chat) => {
-    // const chatMember = chat.members.find((member) => member !== user._id);
-    // const chatMember = chat.find((member) => member !== user._id);
-    // const online = onlineUsers.find((user) => user.userId === chatMember);
-    // return online ? true : false;
     return true;
   };
 
@@ -115,7 +93,6 @@ const Chat = () => {
         <ChatBox
           chat={currentChat}
           currentUser={user._id}
-          // currentUser={"user"}
           setSendMessage={setSendMessage}
           receivedMessage={receivedMessage}
         />

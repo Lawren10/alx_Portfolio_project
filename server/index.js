@@ -5,14 +5,10 @@ import cors from "cors";
 import mongoose from "mongoose";
 import http from "http";
 import { Server } from "socket.io";
-// const http = require("http");
-// const chatSocket = require("socket.io");
 
 // routes
 import AuthRoute from "./routes/AuthRoute.js";
 import UserRoute from "./routes/UserRoute.js";
-import PostRoute from "./routes/PostRoute.js";
-import UploadRoute from "./routes/UploadRoute.js";
 import ChatRoute from "./routes/ChatRoute.js";
 import MessageRoute from "./routes/MessageRoute.js";
 
@@ -30,15 +26,10 @@ const io = new Server(server, {
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cors());
-// to serve images inside public folder
-app.use(express.static("public"));
-app.use("/images", express.static("images"));
 
 //different routes
 app.use("/auth", AuthRoute);
 app.use("/user", UserRoute);
-app.use("/posts", PostRoute);
-app.use("/upload", UploadRoute);
 app.use("/chat", ChatRoute);
 app.use("/message", MessageRoute);
 
@@ -56,7 +47,7 @@ io.on("connection", (socket) => {
     // if user is not added previously
     if (!activeUsers.some((user) => user.userId._id === newUserId._id)) {
       activeUsers.push({ userId: newUserId, socketId: socket.id });
-      console.log("New User Connected", activeUsers.length);
+      // console.log("New User Connected", activeUsers.length);
     }
     // send all active users to new user
     io.emit("get-users", activeUsers);
@@ -65,7 +56,7 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     // remove user from active users
     activeUsers = activeUsers.filter((user) => user.socketId !== socket.id);
-    console.log("User Disconnected", activeUsers);
+    // console.log("User Disconnected", activeUsers);
     // send all active users to all users
     io.emit("get-users", activeUsers.length);
   });
@@ -75,8 +66,8 @@ io.on("connection", (socket) => {
     const { receiverId } = data;
     // const user = activeUsers.find((user) => user.userId === receiverId);
     const user = activeUsers.find((user) => user.userId._id === receiverId);
-    console.log("Sending from socket to :", receiverId);
-    console.log("Data: ", data);
+    // console.log("Sending from socket to :", receiverId);
+    // console.log("Data: ", data);
     if (user) {
       io.to(user.socketId).emit("recieve-message", data);
     }

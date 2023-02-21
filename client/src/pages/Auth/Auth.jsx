@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./Auth.css";
-import Logo from "../../img/logo.png";
 import { logIn, signUp } from "../../actions/AuthActions.js";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -58,8 +57,6 @@ const Auth = () => {
       {/* left side */}
 
       <div className="a-left">
-        <img src={Logo} alt="" />
-
         <div className="Webname">
           <h1>eChat</h1>
           <h6>Real time chat</h6>

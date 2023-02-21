@@ -2,13 +2,13 @@ import "./App.css";
 import { Routes, Route, Navigate } from "react-router-dom";
 // import Home from "./pages/Home";
 import Auth from "./pages/Auth/Auth";
-import Profile from "./pages/Profile/Profile";
+// import Profile from "./pages/Profile/Profile";
 import { useSelector } from "react-redux";
 import Chat from "./pages/Chat/Chat";
 
 function App() {
   const user = useSelector((state) => state.authReducer.authData);
-  console.log(user);
+  // console.log(user);
   return (
     <div
       className="App"
@@ -34,10 +34,10 @@ function App() {
           path="/auth"
           element={user ? <Navigate to="../chat" /> : <Auth />}
         />
-        <Route
+        {/* <Route
           path="/profile/:id"
           element={user ? <Profile /> : <Navigate to="../auth" />}
-        />
+        /> */}
         <Route
           path="*"
           element={

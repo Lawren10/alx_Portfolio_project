@@ -8,7 +8,7 @@
   border-radius: 10px;
   padding: 5px;
 }
-.Search>input {
+.Search > input {
   background-color: transparent;
   border: none;
   outline: none;
@@ -17,8 +17,27 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(106.23deg, #f99827 0%, #f95f35 100%);
+  background: var(--buttonBg);
   border-radius: 5px;
-  padding: 4px;
+  padding: 5px;
   color: white;
+}
+
+.Webname > h1 {
+  font-size: 2rem;
+  background-color: blue;
+  margin: 0;
+  /* Create the gradient. */
+  background-image: var(--buttonBg);
+
+  /* Set the background size and repeat properties. */
+  background-size: 100%;
+  background-repeat: repeat;
+
+  /* Use the text as a mask for the background. */
+  /* This will show the gradient as a text color rather than element bg. */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
 }
