@@ -27,7 +27,7 @@ export const getMessages = async (req, res) => {
 
 export const getAllMessages = async (req, res) => {
   try {
-    console.log(req.params.chatId, req.params.senderId);
+    // console.log(req.params.chatId, req.params.senderId);
     const chat = await MessageModel.find({
       $all: [req.params.firstId, req.params.secondId],
     });
